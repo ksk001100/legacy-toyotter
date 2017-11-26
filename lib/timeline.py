@@ -2,10 +2,11 @@ from oauth import *
 import json
 import re
 from requests_oauthlib import OAuth1Session
+import coloring_string as cs
 
 
 def getTimeLine():
-    print ('')
+    print('')
     url = "https://api.twitter.com/1.1/statuses/home_timeline.json"
     count = 0
     params = {}
@@ -25,18 +26,17 @@ def getTimeLine():
             Tweet = tweet["text"]
             m = re.search('(?<=@)\w+', Tweet)
             if(m != None):
-                Tweet = Tweet.replace(
-                    '@' + m.group(0), "\033[35m" + "@" + m.group(0) + "\033[0m")
-            Tweet = Tweet.replace("\n", " ")
-            print("[\033[33m" + time[3] + "\033[0m]", end='')
+                Tweet = Tweet.replace('@' + m.group(0), cs.magenta("@" + m.group(0)))
+            Tweet=Tweet.replace("\n", " ")
+            print('[' + cs.yellow(time[3]) + ']', end = '')
             if(count % 2 == 0):
-                print("\033[36m@" + tweet['user']['screen_name'] + " \033[0m", end='')
+                print(cs.cyan('@' + tweet['user']['screen_name']), end = '')
             else:
-                print("\033[32m@" + tweet['user']['screen_name'] + " \033[0m",end='')
-            print(Tweet + " \033[31m" + str(tweet['id']) + "\033[0m")
+                print(cs.green('@' + tweet['user']['screen_name']), end = '')
+            print(' ' + Tweet + cs.red(str(tweet['id'])) + ' ')
     else:
         print("Error: %d" % req.status_code)
-    print ('')
+    print('')
 
 
 def main():

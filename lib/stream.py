@@ -1,6 +1,7 @@
 from oauth import *
 from datetime import timedelta
 import re
+import coloring_string as cs
 
 
 class Listener(StreamListener):
@@ -13,9 +14,8 @@ class Listener(StreamListener):
             Tweet = Tweet.replace(
                 '@' + m.group(0), "\033[35m" + "@" + m.group(0) + "\033[0m")
         Tweet = Tweet.replace("\n", " ")
-        print("[\033[32mvia {src}\033[0m] [\033[33m{created}\033[0m] \033[36m@{screen}\033[0m {text} \033[31m{id}\033[0m\n".format(
-            name=status.author.name, screen=status.author.screen_name,
-            created=status.created_at, text=Tweet, src=status.source, id=status.id)), "\r",
+        print("[" + cs.green("via " + status.source) + "] [" + cs.yellow(str(status.created_at)) + "] @" +
+              cs.cyan(status.author.screen_name) + " " + Tweet + " " + cs.red(str(status.id) + "\n"))
         return True
 
     def on_error(self, status_code):

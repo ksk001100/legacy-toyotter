@@ -14,8 +14,10 @@ class Listener(StreamListener):
             Tweet = Tweet.replace(
                 '@' + m.group(0), "\033[35m" + "@" + m.group(0) + "\033[0m")
         Tweet = Tweet.replace("\n", " ")
-        print("[" + cs.green("via " + status.source) + "] [" + cs.yellow(str(status.created_at)) + "] @" +
-              cs.cyan(status.author.screen_name) + " " + Tweet + " " + cs.red(str(status.id) + "\n"))
+        print("[via {src}] [{created}] @{screen} {text} {id}\n".format(
+            screen=cs.cyan(status.author.screen_name), created=cs.yellow(str(status.created_at)),
+            text=Tweet, src=cs.green(status.source), id=cs.red(str(status.id)))
+            ), "\r",
         return True
 
     def on_error(self, status_code):
